@@ -1,5 +1,6 @@
 import random
 import uuid
+import time
 from datetime import datetime, timezone
 customer=["CUST101","CUST102","CUST103","CUST104"]
 merchant=["Flipkart","Amazon","Zepto","Swiggy"]
@@ -17,6 +18,8 @@ def generate_transaction():
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
     
-for i in range(10):
+    
+while True:
     transaction = generate_transaction()
     print(transaction)
+    time.sleep(2)  # Sleep for 1 second before generating the next transaction
