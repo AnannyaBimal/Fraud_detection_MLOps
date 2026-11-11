@@ -19,7 +19,6 @@ def generate_transaction():
     }
     
     
-while True:
+if __name__ == "__main__":
     transaction = generate_transaction()
-    print(transaction)
     time.sleep(2)  # Sleep for 1 second before generating the next transaction
