@@ -17,8 +17,17 @@ def create_database():
             timestamp TEXT
         )""")
         
-    print("Database is ready at:", DB_PATH)
-
+        
+     # create quarantine table for rejected transactions
+        conn.execute("""Create table if not exists quarantine_transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transaction_id TEXT,
+            raw_data TEXT,
+            rejection_reason TEXT NOT NULL,
+            rejected_at TEXT NOT NULL
+        )""")
+        
+    print("Database and quarantine tables ready at:", DB_PATH)
 if __name__ == "__main__":
     create_database()
     
