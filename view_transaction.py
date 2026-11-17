@@ -1,13 +1,8 @@
 import sqlite3
-import pandas as pd
-
 from database import DB_PATH
 
 with sqlite3.connect(DB_PATH) as conn:
-    df = pd.read_sql_query(
-        "SELECT * FROM quarantine_transactions ",
-        conn
-    )
-    
-    
-print(df.head(10))
+
+    conn.execute("DROP TABLE IF EXISTS transaction_features")
+
+print("Old transaction_features table removed.")
