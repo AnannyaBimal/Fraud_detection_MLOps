@@ -23,9 +23,10 @@ def create_database():
             )
         """)
 
-        # Quarantine table
+        # Quarantine table. Keep this name in sync with ingestion.py and
+        # dashboard.py, which both write/read quarantined transactions.
         conn.execute("""
-            CREATE TABLE IF NOT EXISTS quarantine_transactions (
+            CREATE TABLE IF NOT EXISTS quarantined_transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 transaction_id TEXT,
                 raw_data TEXT,
@@ -33,6 +34,21 @@ def create_database():
                 rejected_at TEXT NOT NULL
             )
         """)
+
+        # Older versions of this project created the table without the "d".
+        # Copy existing rows so databases created by those versions continue
+        # to work with ingestion.py and the dashboard.
+        legacy_table = conn.execute("""
+            SELECT 1 FROM sqlite_master
+            WHERE type = 'table' AND name = 'quarantine_transactions'
+        """).fetchone()
+        if legacy_table:
+            conn.execute("""
+                INSERT OR IGNORE INTO quarantined_transactions
+                    (id, transaction_id, raw_data, rejection_reason, rejected_at)
+                SELECT id, transaction_id, raw_data, rejection_reason, rejected_at
+                FROM quarantine_transactions
+            """)
 
         # Transaction features table
         conn.execute("""
