@@ -51,9 +51,12 @@ Path("models").mkdir(exist_ok=True)
 artifact = {
     "model": model,
     "features": FEATURES,
-    "version": "V1.0"
+    "version": "V1.0",
+    "threshold": 0.65
 }
 
-joblib.dump(artifact, "models/fraud_model.pkl")
+joblib.dump(artifact,
+            "models/fraud_model_v1.jolib"
+)
 
 print("Model saved successfully")
